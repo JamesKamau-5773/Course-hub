@@ -9,3 +9,21 @@ import Signup from './Components/pages/Signup';
 import Dashboard from './Components/pages/Dashboard';
 import "./index.css"
 
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/students" element={<Students />} />
+        <Route path="/enrollments" element={<Enrollments />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;
