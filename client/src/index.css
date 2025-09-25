@@ -48,3 +48,260 @@ body {
   transition: all 0.3s ease;
 }
 
+.nav-links a:hover, .nav-links a.active {
+  background: linear-gradient(90deg, #5a189a, #7b2cbf);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(122, 0, 204, 0.6);
+}
+
+/* Cards */
+.card {
+  background: rgba(25, 0, 35, 0.95);
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(90, 0, 150, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(150, 0, 255, 0.5);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #cfcfcf;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #5a189a;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #0f0f0f;
+  color: #f2f2f2;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #9d4edd;
+  box-shadow: 0 0 8px rgba(157, 78, 221, 0.6);
+}
+
+.error {
+  color: #ff4d6d;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0.25rem;
+  color: white;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(157, 78, 221, 0.7);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #5a189a, #7b2cbf);
+}
+.btn-success {
+  background: linear-gradient(90deg, #2d6a4f, #52b788);
+}
+.btn-danger {
+  background: linear-gradient(90deg, #a4161a, #e5383b);
+}
+.btn-secondary {
+  background: linear-gradient(90deg, #495057, #6c757d);
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #e5e5e5;
+}
+
+.table th {
+  background: rgba(90, 24, 154, 0.7);
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Authentication Pages */
+/* Full screen center layout */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+/* Auth card */
+.auth-card {
+  background: rgba(25, 0, 35, 0.9);
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(150, 0, 255, 0.3);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Headings */
+.auth-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #9d4edd, #7b2cbf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* Form fields */
+.auth-card .form-group {
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.auth-card label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #cfcfcf;
+}
+
+.auth-card .form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #5a189a;
+  border-radius: 8px;
+  background: #0f0f0f;
+  color: #f2f2f2;
+  margin-top: 0.5rem;
+}
+
+/* Buttons inside form */
+.auth-card .btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+/* Links */
+.auth-card p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.auth-card a {
+  color: #9d4edd;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.auth-card a:hover {
+  color: #d0a2f7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .container {
+    padding: 0 10px;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .auth-card {
+    padding: 1.5rem 2rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .table th, .table td {
+    padding: 0.5rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links a {
+    padding: 0.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .auth-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .btn {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .auth-card {
+    padding: 1rem 1.5rem;
+  }
+}
