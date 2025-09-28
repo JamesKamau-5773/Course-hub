@@ -1,0 +1,54 @@
+# Standard library imports
+import os
+
+# Remote library imports
+from flask import Flask
+from flask_cors import CORS
+from flask_migrate import Migrate
+from flask_restful import Api
+
+# Local imports
+from models import db  # Import db from models
+
+#Important resources
+from resources import(
+    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorCoursesResource
+)
+
+# Instantiate app, set attributes
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
+
+# Initialize db with app
+db.init_app(app)
+
+from models import bcrypt
+bcrypt.init_app(app)
+
+migrate = Migrate(app, db)
+
+# Instantiate REST API
+api = Api(app)
+
+# Instantiate CORS
+CORS(app)
+
+
+# add API routes
+api.add_resource(UsersResource, '/users')
+api.add_resource(UserByIdResource, '/users/<int:user_id>')
+api.add_resource(StudentsResource, '/students')
+api.add_resource(CoursesResource, '/courses')
+api.add_resource(EnrollmentsResource, '/enrollments')   
+api.add_resource(CourseEnrollmentsResource, '/courses/<int:course_id>/enrollments')
+api.add_resource(StudentEnrollmentsResource, '/students/<int:student_id>/enrollments')
+api.add_resource(InstructorCoursesResource, '/instructors/<int:instructor_id>/courses')
+
+@app.route('/')
+def home():
+    return 'Course Hub API'
+
+if __name__ == '__main__':
+    app.run(debug=True)
