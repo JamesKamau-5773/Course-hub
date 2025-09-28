@@ -1,9 +1,7 @@
-const API_URL = 'http://localhost:5555/api';
+const API_URL = '/api';
 
-// Get token from localStorage
 const getToken = () => localStorage.getItem('token');
 
-// Simple fetch helper with authentication
 const fetchData = async (endpoint, options = {}) => {
   const token = getToken();
   try {
@@ -18,7 +16,6 @@ const fetchData = async (endpoint, options = {}) => {
 
     if (!response.ok) {
       if (response.status === 401) {
-        // Token expired or invalid, redirect to login
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
@@ -35,7 +32,6 @@ const fetchData = async (endpoint, options = {}) => {
   }
 };
 
-// Auth API
 export const signup = (data) => fetchData('/auth/signup', {
   method: 'POST',
   body: JSON.stringify(data),
@@ -46,7 +42,6 @@ export const login = (data) => fetchData('/auth/login', {
   body: JSON.stringify(data),
 });
 
-// Course API
 export const getCourses = () => fetchData('/courses');
 export const createCourse = (data) => fetchData('/courses', {
   method: 'POST',
@@ -60,7 +55,6 @@ export const deleteCourse = (id) => fetchData(`/courses/${id}`, {
   method: 'DELETE',
 });
 
-// Student API
 export const getStudents = () => fetchData('/students');
 export const getStudent = (id) => fetchData(`/students/${id}`);
 export const createStudent = (data) => fetchData('/students', {
@@ -68,7 +62,6 @@ export const createStudent = (data) => fetchData('/students', {
   body: JSON.stringify(data),
 });
 
-// Enrollment API
 export const getEnrollments = () => fetchData('/enrollments');
 export const createEnrollment = (data) => fetchData('/enrollments', {
   method: 'POST',
