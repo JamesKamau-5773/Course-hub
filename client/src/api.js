@@ -15,7 +15,7 @@ const fetchData = async (endpoint, options = {}) => {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !endpoint.startsWith('/auth/')) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
@@ -47,6 +47,7 @@ export const createCourse = (data) => fetchData('/courses', {
   method: 'POST',
   body: JSON.stringify(data),
 });
+
 export const updateCourse = (id, data) => fetchData(`/courses/${id}`, {
   method: 'PUT',
   body: JSON.stringify(data),
@@ -61,6 +62,8 @@ export const createStudent = (data) => fetchData('/students', {
   method: 'POST',
   body: JSON.stringify(data),
 });
+
+export const getInstructors = () => fetchData('/instructors');
 
 export const getEnrollments = () => fetchData('/enrollments');
 export const createEnrollment = (data) => fetchData('/enrollments', {

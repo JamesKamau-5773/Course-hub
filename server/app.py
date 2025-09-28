@@ -1,3 +1,6 @@
+
+
+
 # Standard library imports
 import os
 
@@ -12,7 +15,7 @@ from models import db  # Import db from models
 
 #Important resources
 from resources import(
-    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorCoursesResource
+    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorCoursesResource,SighnupResource,LoginResource,LogoutResource
 )
 
 # Instantiate app, set attributes
@@ -31,19 +34,24 @@ migrate = Migrate(app, db)
 
 # Instantiate REST API
 api = Api(app)
+api.prefix = '/api'
 
 # Instantiate CORS
 CORS(app)
 
 
 # add API routes
+api.add_resource(SighnupResource, '/auth/signup')
+api.add_resource(LoginResource, '/auth/login')
+api.add_resource(LogoutResource, '/auth/logout')
 api.add_resource(UsersResource, '/users')
 api.add_resource(UserByIdResource, '/users/<int:user_id>')
 api.add_resource(StudentsResource, '/students')
 api.add_resource(CoursesResource, '/courses')
-api.add_resource(EnrollmentsResource, '/enrollments')   
+api.add_resource(EnrollmentsResource, '/enrollments')
 api.add_resource(CourseEnrollmentsResource, '/courses/<int:course_id>/enrollments')
 api.add_resource(StudentEnrollmentsResource, '/students/<int:student_id>/enrollments')
+api.add_resource(InstructorsResource, '/instructors')
 api.add_resource(InstructorCoursesResource, '/instructors/<int:instructor_id>/courses')
 
 @app.route('/')

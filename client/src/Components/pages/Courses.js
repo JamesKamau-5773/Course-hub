@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSearch } from '../../contexts/SearchContext';
 import { getCourses, createCourse } from '../../api';
 import CourseForm from '../CourseForm';
 
 const Courses = () => {
+  const navigate = useNavigate();
+  const { searchTerm } = useSearch();
   const [courses, setCourses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -10,6 +14,16 @@ const Courses = () => {
   useEffect(() => {
     loadCourses();
   }, []);
+
+  const filteredCourses = courses.filter(course => {
+    const term = searchTerm.toLowerCase();
+    return (
+      course.title.toLowerCase().includes(term) ||
+      course.course_code.toLowerCase().includes(term) ||
+      course.description.toLowerCase().includes(term) ||
+      (course.instructor && course.instructor.name.toLowerCase().includes(term))
+    );
+  });
 
   const loadCourses = async () => {
     setLoading(true);
@@ -36,6 +50,7 @@ const Courses = () => {
 
   return (
     <div>
+      <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
       <h2>Courses</h2>
       {loading ? (
         <p>Loading...</p>
@@ -49,10 +64,15 @@ const Courses = () => {
             />
           )}
           <ul>
-            {courses.map((course) => (
-              <li key={course.id}>{course.title}</li>
+            {filteredCourses.map((course) => (
+              <li key={course.id}>
+                {course.title} ({course.course_code}) - Instructor: {course.instructor ? course.instructor.name : 'N/A'} - {course.description}
+              </li>
             ))}
           </ul>
+          {searchTerm && filteredCourses.length === 0 && (
+            <p>No courses found matching "{searchTerm}"</p>
+          )}
         </>
       )}
     </div>

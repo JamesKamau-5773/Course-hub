@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSearch } from '../contexts/SearchContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const { setSearchTerm } = useSearch();
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
@@ -30,6 +32,12 @@ const Navbar = () => {
                 <Link to="/enrollments" className={isActive('/enrollments') ? 'active' : ''}>
                   Enrollments
                 </Link>
+                <input
+                  type="text"
+                  placeholder="Search courses..."
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ margin: '0 10px', padding: '5px', width: '200px' }}
+                />
                 <button
                   className="logout-button"
                   onClick={() => {

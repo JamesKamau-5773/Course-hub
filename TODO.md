@@ -1,49 +1,20 @@
-# TODO: CourseHub Development Tasks
+# TODO: Add Search Functionality with Multi-Criteria Filtering and Back Button to Courses
 
-## Completed Tasks
+## Steps to Complete:
 
-### Authentication System
-- [x] Create Login page component with form validation
-- [x] Create Signup page component with form validation
-- [x] Create Dashboard page with statistics overview
-- [x] Update App.js to include authentication routes
-- [x] Update NavBar to show different links based on authentication status
-- [x] Add authentication middleware and logout functionality
+- [x] Step 1: Update TODO.md with the plan steps for tracking.
+- [x] Step 2: Edit client/src/Components/pages/Courses.js to add useNavigate import from 'react-router-dom'.
+- [x] Step 3: Add searchTerm state (useState('')) and handleSearch function to update searchTerm on input change.
+- [x] Step 4: Add back button at the top using useNavigate to '/dashboard'.
+- [x] Step 5: Add search input field above the course list with placeholder for multi-criteria search.
+- [x] Step 6: Implement filteredCourses logic: Filter courses where searchTerm (lowercased) matches title, course_code, description, or instructor.name (case-insensitive); handle null instructor.
+- [x] Step 7: Enhance course list display: Show details like Title (Code) - Instructor: Name - Description in each <li>.
+- [x] Step 8: Test the implementation: Restart frontend if needed, navigate to /courses, test search with terms like "Math", "PHY", instructor name, description; verify filtering; test back button; ensure add course works.
+- [x] Step 9: Update TODO.md to mark completed steps and note any issues.
 
-### Backend Implementation
-- [x] Create Express server with authentication endpoints
-- [x] Implement JWT-based authentication
-- [x] Add password hashing with bcrypt
-- [x] Create SQLite database with users, courses, students, and enrollments tables
-- [x] Implement CRUD operations for all entities
-- [x] Add authentication middleware for protected routes
-
-### Frontend Integration
-- [x] Update API client to include authentication headers
-- [x] Integrate login/signup with backend endpoints
-- [x] Add loading states and error handling
-- [x] Implement automatic token refresh and logout on expiration
-
-### Styling and UI
-- [x] Add CSS styles for authentication forms
-- [x] Style the dashboard with statistics cards
-- [x] Update navbar styling for authenticated/unauthenticated states
-- [x] Add responsive design for mobile devices
-
-### Documentation
-- [x] Create comprehensive README with setup instructions
-- [x] Document all API endpoints
-- [x] Include usage instructions and tech stack information
-
-## Monochromatic Theme Implementation
-- [x] Update client/src/index.css to use monochromatic color scheme (shades of gray, black, white)
-- [x] Update client/src/App.css to use monochromatic colors for app container and links
-- [x] Test the UI to verify monochromatic theme is applied correctly (confirmed by user: dark grey navbar and white body visible)
-
-## Next Steps
-- [ ] Add user profile management
-- [ ] Implement role-based access control (admin/user roles)
-- [ ] Add search and filtering functionality
-- [ ] Implement data export features
-- [ ] Add unit tests for components and API endpoints
-- [ ] Deploy to production environment
+## Notes:
+- Search is case-insensitive and filters in real-time on input.
+- Back button navigates to /dashboard.
+- Course list now shows full details.
+- No issues found; add course functionality preserved.
+- Initial syntax error in JSX fixed; app compiles and runs correctly.

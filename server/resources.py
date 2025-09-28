@@ -30,21 +30,21 @@ class SighnupResource(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data.get('username') or not data.get('password'):
-            return {'error': 'Username and password are required'}, 400
-        
-        if Users.query.filter_by(username=data['username']).first():
+        if not data.get('name') or not data.get('password') or not data.get('email'):
+            return {'error': 'Name, email and password are required'}, 400
+
+        if Users.query.filter_by(username=data['name']).first():
             return {'error': 'Username already exists'}, 400
-        
-        if Users.query.filter_by(email=data.get('email','')).first():
-            return {'error': 'Email alredy exists'}, 400
-        
+
+        if Users.query.filter_by(email=data['email']).first():
+            return {'error': 'Email already exists'}, 400
+
         try:
-            
+
             user = Users(
-               username=data['username'],
+               username=data['name'],
                email=data['email'],
-               role=data['role']
+               role='student'
 
             )
 
@@ -57,7 +57,7 @@ class SighnupResource(Resource):
                 'user': user.to_dict(),
                 'token': token
             }
-        
+
         except Exception as e:
             return {'error': str(e)}, 400
 
@@ -65,19 +65,19 @@ class LoginResource(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data.get ('username') or not data.get ('password'):
-            return {'error': 'Username and password are required'}, 400
+        if not data.get ('email') or not data.get ('password'):
+            return {'error': 'Email and password are required'}, 400
 
-        user=Users.query.filter_by(username=data['username']).first()
+        user=Users.query.filter_by(email=data['email']).first()
 
         if not user or not user.check_password(data['password']):
-            return {'error': 'Invalid username or password'}, 401
+            return {'error': 'Invalid email or password'}, 401
 
         token = user.generate_token()
         return{
             'user': user.to_dict(),
             'token': token
-        }, 200      
+        }, 200
 
 class LogoutResource(Resource):
     def post(self):
@@ -265,6 +265,11 @@ class StudentEnrollmentsResource(Resource):
         student = Students.query.get_or_404(student_id)
         return [enrollment.to_dict() for enrollment in student.enrollments], 200
 
+
+class InstructorsResource(Resource):
+    def get(self):
+        instructors = Instructors.query.all()
+        return [instructor.to_dict() for instructor in instructors], 200
 
 class InstructorCoursesResource(Resource):
     def get(self, instructor_id):
