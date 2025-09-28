@@ -265,6 +265,7 @@ cd server && rm -rf venv && python -m venv venv && source venv/bin/activate && p
 If you have any questions, suggestions, or need assistance, please contact:
 
 GitHub: @JamesKamau-5773
+      : @alexmwangi
 
 ## License
 
