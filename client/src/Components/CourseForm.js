@@ -45,8 +45,8 @@ const CourseForm = ({ onSubmit, onCancel }) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ marginTop: "1rem", padding: "1rem", background: "#f8f9fa", borderRadius: "4px" }}>
-      <h3>Add New Course</h3>
+    <form onSubmit={formik.handleSubmit} className="card" style={{ marginTop: "1rem" }}>
+      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Add New Course</h3>
 
       <div className="form-group">
         <label>Title</label>

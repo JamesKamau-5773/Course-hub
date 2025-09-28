@@ -40,8 +40,8 @@ const EnrollmentForm = ({ onSubmit }) => {
     });
     
     return (
-        <form onSubmit={formik.handleSubmit} style={{marginTop: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px'}}>
-      <h3>Enroll Student in Course</h3>
+        <form onSubmit={formik.handleSubmit} className="card" style={{marginTop: '1rem'}}>
+      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Enroll Student in Course</h3>
       
       <div className="form-group">
         <label>Student</label>

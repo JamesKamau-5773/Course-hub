@@ -4,7 +4,7 @@ import { useSearch } from '../contexts/SearchContext';
 
 const Navbar = () => {
   const location = useLocation();
-  const { setSearchTerm } = useSearch();
+  const { searchTerm, setSearchTerm, searchType, setSearchType } = useSearch();
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
@@ -32,12 +32,23 @@ const Navbar = () => {
                 <Link to="/enrollments" className={isActive('/enrollments') ? 'active' : ''}>
                   Enrollments
                 </Link>
-                <input
-                  type="text"
-                  placeholder="Search courses..."
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ margin: '0 10px', padding: '5px', width: '200px' }}
-                />
+                <div style={{ display: 'flex', alignItems: 'center', margin: '0 10px' }}>
+                  <select
+                    onChange={(e) => setSearchType(e.target.value)}
+                    defaultValue="course"
+                    style={{ marginRight: '5px', padding: '5px' }}
+                  >
+                    <option value="course">Search Courses</option>
+                    <option value="enrollment">Search Enrollments</option>
+                    <option value="student">Search Students</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder={`Search ${searchType}s...`}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ padding: '5px', width: '200px' }}
+                  />
+                </div>
                 <button
                   className="logout-button"
                   onClick={() => {

@@ -6,7 +6,7 @@ import CourseForm from '../CourseForm';
 
 const Courses = () => {
   const navigate = useNavigate();
-  const { searchTerm } = useSearch();
+  const { searchTerm, searchType } = useSearch();
   const [courses, setCourses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const Courses = () => {
     loadCourses();
   }, []);
 
-  const filteredCourses = courses.filter(course => {
+  const filteredCourses = searchType === 'course' ? courses.filter(course => {
     const term = searchTerm.toLowerCase();
     return (
       course.title.toLowerCase().includes(term) ||
@@ -23,7 +23,7 @@ const Courses = () => {
       course.description.toLowerCase().includes(term) ||
       (course.instructor && course.instructor.name.toLowerCase().includes(term))
     );
-  });
+  }) : courses;
 
   const loadCourses = async () => {
     setLoading(true);
@@ -49,32 +49,58 @@ const Courses = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
-      <h2>Courses</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <button onClick={() => setShowForm(true)}>Add Course</button>
-          {showForm && (
-            <CourseForm
-              onSubmit={handleCreateCourse}
-              onCancel={() => setShowForm(false)}
-            />
-          )}
-          <ul>
-            {filteredCourses.map((course) => (
-              <li key={course.id}>
-                {course.title} ({course.course_code}) - Instructor: {course.instructor ? course.instructor.name : 'N/A'} - {course.description}
-              </li>
-            ))}
-          </ul>
-          {searchTerm && filteredCourses.length === 0 && (
-            <p>No courses found matching "{searchTerm}"</p>
-          )}
-        </>
-      )}
+    <div className="container">
+      <div className="card">
+        <button className="btn btn-secondary" onClick={() => navigate('/dashboard')} style={{ marginBottom: '1rem' }}>Back to Dashboard</button>
+        <h2 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Courses</h2>
+        {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', fontSize: '18px', color: '#e5e5e5' }}>
+            Loading...
+          </div>
+        ) : (
+          <>
+            <button className="btn btn-primary" onClick={() => setShowForm(true)}>Add Course</button>
+            {showForm && (
+              <CourseForm
+                onSubmit={handleCreateCourse}
+                onCancel={() => setShowForm(false)}
+              />
+            )}
+            {filteredCourses.length > 0 ? (
+              <div className="table-container">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Course Code</th>
+                      <th>Instructor</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredCourses.map((course) => (
+                      <tr key={course.id}>
+                        <td>{course.title}</td>
+                        <td>{course.course_code}</td>
+                        <td>{course.instructor ? course.instructor.name : 'N/A'}</td>
+                        <td>{course.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p style={{ color: '#e5e5e5', textAlign: 'center', marginTop: '2rem' }}>No courses available.</p>
+            )}
+            {searchTerm && searchType === 'course' && filteredCourses.length === 0 && (
+              <p style={{ color: '#ff4d6d', textAlign: 'center' }}>No courses found matching "{searchTerm}"</p>
+            )}
+            {searchTerm && searchType !== 'course' && (
+              <p style={{ color: '#aaa', textAlign: 'center' }}>Search for {searchType}s on the {searchType}s page.</p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
