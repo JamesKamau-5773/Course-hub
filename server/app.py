@@ -15,7 +15,7 @@ from models import db  # Import db from models
 
 #Important resources
 from resources import(
-    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorByIdResource,InstructorCoursesResource,SighnupResource,LoginResource,LogoutResource
+    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorByIdResource,InstructorCoursesResource,SignupResource,LoginResource,LogoutResource
 )
 
 # Instantiate app, set attributes
@@ -45,7 +45,7 @@ CORS(app)
 
 
 # add API routes
-api.add_resource(SighnupResource, '/auth/signup')
+api.add_resource(SignupResource, '/auth/signup')
 api.add_resource(LoginResource, '/auth/login')
 api.add_resource(LogoutResource, '/auth/logout')
 api.add_resource(UsersResource, '/users')

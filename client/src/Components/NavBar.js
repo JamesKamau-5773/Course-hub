@@ -4,7 +4,7 @@ import { useSearch } from '../contexts/SearchContext';
 
 const Navbar = () => {
   const location = useLocation();
-  const { searchTerm, setSearchTerm, searchType, setSearchType } = useSearch();
+  const { setSearchTerm, searchType, setSearchType } = useSearch();
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
@@ -37,8 +37,11 @@ const Navbar = () => {
                 </Link>
                 <div style={{ display: 'flex', alignItems: 'center', margin: '0 10px' }}>
                   <select
-                    onChange={(e) => setSearchType(e.target.value)}
-                    defaultValue="course"
+                    value={searchType}
+                    onChange={(e) => {
+                      setSearchType(e.target.value);
+                      setSearchTerm('');
+                    }}
                     style={{ marginRight: '5px', padding: '5px' }}
                   >
                     <option value="course">Search Courses</option>
@@ -49,6 +52,7 @@ const Navbar = () => {
                   <input
                     type="text"
                     placeholder={`Search ${searchType}s...`}
+                    value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ padding: '5px', width: '200px' }}
                   />
