@@ -1,4 +1,4 @@
-const API_URL = '/api';
+const API_URL = 'http://localhost:5001/api';
 
 const getToken = () => localStorage.getItem('token');
 
@@ -62,8 +62,27 @@ export const createStudent = (data) => fetchData('/students', {
   method: 'POST',
   body: JSON.stringify(data),
 });
+export const updateStudent = (id, data) => fetchData(`/students/${id}`, {
+  method: 'PUT',
+  body: JSON.stringify(data),
+});
+export const deleteStudent = (id) => fetchData(`/students/${id}`, {
+  method: 'DELETE',
+});
 
 export const getInstructors = () => fetchData('/instructors');
+export const createInstructor = (data) => fetchData('/instructors', {
+  method: 'POST',
+  body: JSON.stringify(data),
+});
+
+export const updateInstructor = (id, data) => fetchData(`/instructors/${id}`, {
+  method: 'PATCH',
+  body: JSON.stringify(data),
+});
+export const deleteInstructor = (id) => fetchData(`/instructors/${id}`, {
+  method: 'DELETE',
+});
 
 export const getEnrollments = () => fetchData('/enrollments');
 export const createEnrollment = (data) => fetchData('/enrollments', {

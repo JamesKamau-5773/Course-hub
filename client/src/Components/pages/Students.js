@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearch } from '../../contexts/SearchContext';
-import { getStudents, createStudent } from '../../api';
+import { getStudents, createStudent, updateStudent, deleteStudent } from '../../api';
 import StudentForm from '../StudentForm';
 
 const Students = () => {
@@ -8,6 +8,7 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
     loadStudents();
@@ -34,14 +35,37 @@ const Students = () => {
     }
   };
 
-  const handleCreateStudent = async (studentData) => {
+  const handleSubmitStudent = async (studentData) => {
     try {
-      await createStudent(studentData);
+      if (editingItem) {
+        await updateStudent(editingItem.id, studentData);
+        alert('Student updated successfully!');
+      } else {
+        await createStudent(studentData);
+        alert('Student created successfully!');
+      }
       setShowForm(false);
+      setEditingItem(null);
       loadStudents();
-      alert('Student created successfully!');
     } catch (error) {
-      alert('Error creating student: ' + error.message);
+      alert(`Error ${editingItem ? 'updating' : 'creating'} student: ` + error.message);
+    }
+  };
+
+  const handleEdit = (student) => {
+    setEditingItem(student);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (student) => {
+    if (window.confirm(`Are you sure you want to delete the student "${student.name}"?`)) {
+      try {
+        await deleteStudent(student.id);
+        loadStudents();
+        alert('Student deleted successfully!');
+      } catch (error) {
+        alert('Error deleting student: ' + error.message);
+      }
     }
   };
 
@@ -55,11 +79,12 @@ const Students = () => {
           </div>
         ) : (
           <>
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>Add Student</button>
+            <button className="btn btn-primary" onClick={() => { setEditingItem(null); setShowForm(true); }}>Add Student</button>
             {showForm && (
               <StudentForm
-                onSubmit={handleCreateStudent}
-                onCancel={() => setShowForm(false)}
+                onSubmit={handleSubmitStudent}
+                onCancel={() => { setShowForm(false); setEditingItem(null); }}
+                initialValues={editingItem || {}}
               />
             )}
             {filteredStudents.length > 0 ? (
@@ -70,6 +95,7 @@ const Students = () => {
                       <th>Name</th>
                       <th>Student ID</th>
                       <th>Email</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -78,6 +104,10 @@ const Students = () => {
                         <td>{student.name}</td>
                         <td>{student.student_id}</td>
                         <td>{student.email}</td>
+                        <td>
+                          <button onClick={() => handleEdit(student)} className="btn btn-warning btn-sm">Edit</button>
+                          <button onClick={() => handleDelete(student)} className="btn btn-danger btn-sm" style={{ marginLeft: '0.5rem' }}>Delete</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

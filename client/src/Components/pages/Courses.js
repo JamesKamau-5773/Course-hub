@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearch } from '../../contexts/SearchContext';
-import { getCourses, createCourse } from '../../api';
+import { getCourses, createCourse, updateCourse, deleteCourse } from '../../api';
 import CourseForm from '../CourseForm';
 
 const Courses = () => {
@@ -10,6 +10,7 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
     loadCourses();
@@ -37,14 +38,37 @@ const Courses = () => {
     }
   };
 
-  const handleCreateCourse = async (courseData) => {
+  const handleSubmitCourse = async (courseData) => {
     try {
-      await createCourse(courseData);
+      if (editingItem) {
+        await updateCourse(editingItem.id, courseData);
+        alert('Course updated successfully!');
+      } else {
+        await createCourse(courseData);
+        alert('Course created successfully!');
+      }
       setShowForm(false);
+      setEditingItem(null);
       loadCourses();
-      alert('Course created successfully!');
     } catch (error) {
-      alert('Error creating course: ' + error.message);
+      alert(`Error ${editingItem ? 'updating' : 'creating'} course: ` + error.message);
+    }
+  };
+
+  const handleEdit = (course) => {
+    setEditingItem(course);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (course) => {
+    if (window.confirm(`Are you sure you want to delete the course "${course.title}"?`)) {
+      try {
+        await deleteCourse(course.id);
+        loadCourses();
+        alert('Course deleted successfully!');
+      } catch (error) {
+        alert('Error deleting course: ' + error.message);
+      }
     }
   };
 
@@ -59,11 +83,12 @@ const Courses = () => {
           </div>
         ) : (
           <>
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>Add Course</button>
+            <button className="btn btn-primary" onClick={() => { setEditingItem(null); setShowForm(true); }}>Add Course</button>
             {showForm && (
               <CourseForm
-                onSubmit={handleCreateCourse}
-                onCancel={() => setShowForm(false)}
+                onSubmit={handleSubmitCourse}
+                onCancel={() => { setShowForm(false); setEditingItem(null); }}
+                initialValues={editingItem || {}}
               />
             )}
             {filteredCourses.length > 0 ? (
@@ -75,6 +100,7 @@ const Courses = () => {
                       <th>Course Code</th>
                       <th>Instructor</th>
                       <th>Description</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -84,6 +110,10 @@ const Courses = () => {
                         <td>{course.course_code}</td>
                         <td>{course.instructor ? course.instructor.name : 'N/A'}</td>
                         <td>{course.description}</td>
+                        <td>
+                          <button onClick={() => handleEdit(course)} className="btn btn-warning btn-sm">Edit</button>
+                          <button onClick={() => handleDelete(course)} className="btn btn-danger btn-sm" style={{ marginLeft: '0.5rem' }}>Delete</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

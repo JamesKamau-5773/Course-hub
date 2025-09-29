@@ -2,14 +2,14 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const StudentForm = ({ onSubmit }) => {
+const StudentForm = ({ onSubmit, onCancel, initialValues = {} }) => {
     const formik = useFormik({
         initialValues: {
-            username: "",
-            email: "",
-            student_id: "",
-            major: "Computer Science",
-            enrollment_year: 2024
+            username: initialValues.username || "",
+            email: initialValues.email || "",
+            student_id: initialValues.student_id || "",
+            major: initialValues.major || "Computer Science",
+            enrollment_year: initialValues.enrollment_year || 2024
         },
         validationSchema: Yup.object({
             username: Yup.string().required("Required"),
@@ -24,7 +24,9 @@ const StudentForm = ({ onSubmit }) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="card" style={{ marginTop: "1rem" }}>
-            <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Add New Student</h3>
+            <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>
+                {initialValues.id ? 'Edit Student' : 'Add New Student'}
+            </h3>
 
             <div className="form-group">
                 <label>Username</label>
@@ -69,7 +71,12 @@ const StudentForm = ({ onSubmit }) => {
                     </select>
                     </div>
 
-                    <button type="submit" className="btn btn-success">Create Student</button>
+                    <button type="submit" className="btn btn-success">
+                        {initialValues.id ? 'Update Student' : 'Create Student'}
+                    </button>
+                    {onCancel && (
+                        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ marginLeft: "0.5rem" }}>Cancel</button>
+                    )}
         </form>
     );
 };

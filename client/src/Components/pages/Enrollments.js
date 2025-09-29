@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearch } from '../../contexts/SearchContext';
-import { getEnrollments, createEnrollment } from '../../api';
+import { getEnrollments, createEnrollment, updateEnrollment, deleteEnrollment } from '../../api';
 import EnrollmentForm from '../EnrollmentForm';
 
 const Enrollments = () => {
@@ -8,6 +8,7 @@ const Enrollments = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
     loadEnrollments();
@@ -35,14 +36,37 @@ const Enrollments = () => {
     }
   };
 
-  const handleCreateEnrollment = async (enrollmentData) => {
+  const handleSubmitEnrollment = async (enrollmentData) => {
     try {
-      await createEnrollment(enrollmentData);
+      if (editingItem) {
+        await updateEnrollment(editingItem.id, enrollmentData);
+        alert('Enrollment updated successfully!');
+      } else {
+        await createEnrollment(enrollmentData);
+        alert('Enrollment created successfully!');
+      }
       setShowForm(false);
+      setEditingItem(null);
       loadEnrollments();
-      alert('Enrollment created successfully!');
     } catch (error) {
-      alert('Error creating enrollment: ' + error.message);
+      alert(`Error ${editingItem ? 'updating' : 'creating'} enrollment: ` + error.message);
+    }
+  };
+
+  const handleEdit = (enrollment) => {
+    setEditingItem(enrollment);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (enrollment) => {
+    if (window.confirm(`Are you sure you want to delete the enrollment for ${enrollment.student ? enrollment.student.name : enrollment.student_id}?`)) {
+      try {
+        await deleteEnrollment(enrollment.id);
+        loadEnrollments();
+        alert('Enrollment deleted successfully!');
+      } catch (error) {
+        alert('Error deleting enrollment: ' + error.message);
+      }
     }
   };
 
@@ -56,11 +80,12 @@ const Enrollments = () => {
           </div>
         ) : (
           <>
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>Add Enrollment</button>
+            <button className="btn btn-primary" onClick={() => { setEditingItem(null); setShowForm(true); }}>Add Enrollment</button>
             {showForm && (
               <EnrollmentForm
-                onSubmit={handleCreateEnrollment}
-                onCancel={() => setShowForm(false)}
+                onSubmit={handleSubmitEnrollment}
+                onCancel={() => { setShowForm(false); setEditingItem(null); }}
+                initialValues={editingItem || {}}
               />
             )}
             {filteredEnrollments.length > 0 ? (
@@ -72,6 +97,7 @@ const Enrollments = () => {
                       <th>Course</th>
                       <th>Status</th>
                       <th>Grade</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,6 +107,10 @@ const Enrollments = () => {
                         <td>{enrollment.course ? enrollment.course.title : enrollment.course_id}</td>
                         <td>{enrollment.status}</td>
                         <td>{enrollment.grade || 'N/A'}</td>
+                        <td>
+                          <button onClick={() => handleEdit(enrollment)} className="btn btn-warning btn-sm">Edit</button>
+                          <button onClick={() => handleDelete(enrollment)} className="btn btn-danger btn-sm" style={{ marginLeft: '0.5rem' }}>Delete</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

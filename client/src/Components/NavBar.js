@@ -29,6 +29,9 @@ const Navbar = () => {
                 <Link to="/students" className={isActive('/students') ? 'active' : ''}>
                   Students
                 </Link>
+                <Link to="/instructors" className={isActive('/instructors') ? 'active' : ''}>
+                  Instructors
+                </Link>
                 <Link to="/enrollments" className={isActive('/enrollments') ? 'active' : ''}>
                   Enrollments
                 </Link>
@@ -41,6 +44,7 @@ const Navbar = () => {
                     <option value="course">Search Courses</option>
                     <option value="enrollment">Search Enrollments</option>
                     <option value="student">Search Students</option>
+                    <option value="instructor">Search Instructors</option>
                   </select>
                   <input
                     type="text"

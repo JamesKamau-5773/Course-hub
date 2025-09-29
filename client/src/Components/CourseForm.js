@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { getInstructors } from "../api";
 
-const CourseForm = ({ onSubmit, onCancel }) => {
+const CourseForm = ({ onSubmit, onCancel, initialValues = {} }) => {
   const [instructors, setInstructors] = useState([]);
 
   useEffect(() => {
-    // Fetch instructors for the dropdown
-    fetch('/api/instructors')
-      .then(res => res.json())
-      .then(instructors => {
-        setInstructors(instructors);
-      })
-      .catch(error => console.error('Error fetching instructors:', error));
+    const loadInstructors = async () => {
+      try {
+        const data = await getInstructors();
+        setInstructors(data);
+      } catch (error) {
+        console.error('Error fetching instructors:', error);
+      }
+    };
+    loadInstructors();
   }, []);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      course_code: "",
-      description: "",
-      credit_hours: "",
-      max_capacity: "",
-      instructor_id: "",
+      title: initialValues.title || "",
+      course_code: initialValues.course_code || "",
+      description: initialValues.description || "",
+      credit_hours: initialValues.credit_hours || "",
+      max_capacity: initialValues.max_capacity || "",
+      instructor_id: initialValues.instructor_id || "",
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Required"),
@@ -46,7 +49,9 @@ const CourseForm = ({ onSubmit, onCancel }) => {
 
   return (
     <form onSubmit={formik.handleSubmit} className="card" style={{ marginTop: "1rem" }}>
-      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Add New Course</h3>
+      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>
+        {initialValues.id ? 'Edit Course' : 'Add New Course'}
+      </h3>
 
       <div className="form-group">
         <label>Title</label>
@@ -120,7 +125,9 @@ const CourseForm = ({ onSubmit, onCancel }) => {
         {formik.touched.instructor_id && formik.errors.instructor_id && <div className="error">{formik.errors.instructor_id}</div>}
       </div>
 
-      <button type="submit" className="btn btn-success">Create Course</button>
+      <button type="submit" className="btn btn-success">
+        {initialValues.id ? 'Update Course' : 'Create Course'}
+      </button>
       <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ marginLeft: "0.5rem" }}>Cancel</button>
     </form>
   );

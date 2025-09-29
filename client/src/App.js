@@ -4,6 +4,7 @@ import { SearchProvider } from './contexts/SearchContext';
 import Navbar from './Components/NavBar';
 import Courses from './Components/pages/Courses';
 import Students from './Components/pages/Students';
+import Instructors from './Components/pages/Instructors';
 import Enrollments from './Components/pages/Enrollments';
 import Login from './Components/pages/Login';
 import Signup from './Components/pages/Signup';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/students" element={<Students />} />
+          <Route path="/instructors" element={<Instructors />} />
           <Route path="/enrollments" element={<Enrollments />} />
         </Routes>
       </div>

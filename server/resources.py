@@ -271,6 +271,57 @@ class InstructorsResource(Resource):
         instructors = Instructors.query.all()
         return [instructor.to_dict() for instructor in instructors], 200
 
+    def post(self):
+        data = request.get_json()
+        try:
+            # Create user first
+            user = Users(
+                username=data['username'],
+                email=data['email'],
+                role='instructor'
+            )
+            user.set_password('defaultpassword')  # Or handle password
+            db.session.add(user)
+            db.session.flush()  # To get user.id
+
+            # Create instructor
+            instructor = Instructors(
+                name=data['name'],
+                specialty=data['specialty'],
+                user_id=user.id
+            )
+            db.session.add(instructor)
+            db.session.commit()
+            return instructor.to_dict(), 201
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 400
+
+
+class InstructorByIdResource(Resource):
+    def get(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        return instructor.to_dict(), 200
+
+    def patch(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        data = request.get_json()
+        try:
+            for attr, value in data.items():
+                if hasattr(instructor, attr):
+                    setattr(instructor, attr, value)
+            db.session.commit()
+            return instructor.to_dict(), 200
+        except Exception as e:
+            return {'error': str(e)}, 400
+
+    def delete(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        db.session.delete(instructor)
+        db.session.commit()
+        return {'message': 'Instructor deleted successfully'}, 200
+
+
 class InstructorCoursesResource(Resource):
     def get(self, instructor_id):
         instructor = Instructors.query.get_or_404(instructor_id)

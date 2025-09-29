@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getCourses, getStudents, getEnrollments } from '../../api';
+import { getCourses, getStudents, getEnrollments, getInstructors } from '../../api';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
     courses: 0,
     students: 0,
-    enrollments: 0
+    enrollments: 0,
+    instructors: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -16,16 +17,18 @@ const Dashboard = () => {
   const loadStats = async () => {
     setLoading(true);
     try {
-      const [courses, students, enrollments] = await Promise.all([
+      const [courses, students, enrollments, instructors] = await Promise.all([
         getCourses(),
         getStudents(),
-        getEnrollments()
+        getEnrollments(),
+        getInstructors()
       ]);
 
       setStats({
         courses: courses.length,
         students: students.length,
-        enrollments: enrollments.length
+        enrollments: enrollments.length,
+        instructors: instructors.length
       });
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
@@ -56,6 +59,11 @@ const Dashboard = () => {
           <h3>Total Enrollments</h3>
           <div className="stat-number">{stats.enrollments}</div>
           <a href="/enrollments" className="stat-link">View Enrollments</a>
+        </div>
+        <div className="stat-card">
+          <h3>Total Instructors</h3>
+          <div className="stat-number">{stats.instructors}</div>
+          <a href="/instructors" className="stat-link">View Instructors</a>
         </div>
       </div>
       <div className="dashboard-recent">

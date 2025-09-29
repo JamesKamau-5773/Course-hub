@@ -135,6 +135,18 @@ body {
 .btn-secondary {
   background: linear-gradient(90deg, #495057, #6c757d);
 }
+.btn-warning {
+  background: linear-gradient(90deg, #f77f00, #fcbf49);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(90deg, #e66a00, #f0b140);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
 
 /* Tables */
 .table {

@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getStudents, getCourses } from "../api";
 
-const EnrollmentForm = ({ onSubmit }) => {
+const EnrollmentForm = ({ onSubmit, onCancel, initialValues = {} }) => {
     const [students, setStudents] = useState([]);
     const [courses, setCourses] = useState([]);
 
@@ -23,11 +23,11 @@ const EnrollmentForm = ({ onSubmit }) => {
 
     const formik = useFormik({
         initialValues: {
-            student_id: '',
-            course_id: '',
-            semester: 'Fall 2024',
-            grade: '',
-            status: 'active',
+            student_id: initialValues.student_id || '',
+            course_id: initialValues.course_id || '',
+            semester: initialValues.semester || 'Fall 2024',
+            grade: initialValues.grade || '',
+            status: initialValues.status || 'active',
         },
         validationSchema: Yup.object({
             student_id: Yup.number().required("Required"),
@@ -41,7 +41,9 @@ const EnrollmentForm = ({ onSubmit }) => {
     
     return (
         <form onSubmit={formik.handleSubmit} className="card" style={{marginTop: '1rem'}}>
-      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>Enroll Student in Course</h3>
+      <h3 style={{ background: 'linear-gradient(90deg, #9d4edd, #7b2cbf)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '700', marginBottom: '1rem' }}>
+        {initialValues.id ? 'Edit Enrollment' : 'Enroll Student in Course'}
+      </h3>
       
       <div className="form-group">
         <label>Student</label>
@@ -79,7 +81,12 @@ const EnrollmentForm = ({ onSubmit }) => {
         </select>
       </div>
 
-      <button type="submit" className="btn btn-success">Enroll Student</button>
+      <button type="submit" className="btn btn-success">
+        {initialValues.id ? 'Update Enrollment' : 'Enroll Student'}
+      </button>
+      {onCancel && (
+        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ marginLeft: "0.5rem" }}>Cancel</button>
+      )}
     </form>
   );
 };
