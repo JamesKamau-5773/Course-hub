@@ -11,10 +11,10 @@ from flask_migrate import Migrate
 from flask_restful import Api
 
 # Local imports
-from models import db  # Import db from models
+from .models import db  # Import db from models
 
 #Important resources
-from resources import(
+from .resources import(
     UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorByIdResource,InstructorCoursesResource,SignupResource,LoginResource,LogoutResource
 )
 
@@ -31,7 +31,11 @@ print(f"Instance path: {app.instance_path}")
 # Initialize db with app
 db.init_app(app)
 
-from models import bcrypt
+# Create all tables
+with app.app_context():
+    db.create_all()
+
+from .models import bcrypt
 bcrypt.init_app(app)
 
 migrate = Migrate(app, db)

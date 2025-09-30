@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db, Users, Students, Instructors, Courses, Enrollments
+from .models import db, Users, Students, Instructors, Courses, Enrollments
 from datetime import datetime
 import jwt
 import flask_bcrypt as Bcrypt

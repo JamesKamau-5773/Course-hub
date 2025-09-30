@@ -1,0 +1,7 @@
+# created by virtualenv automatically
+*
+!.gitignore
+!requirements.txt
+.env
+.server/instance/db
+TODO.md
