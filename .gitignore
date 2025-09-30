@@ -2,6 +2,10 @@
 *
 !.gitignore
 !requirements.txt
+!server/
+!client/
+!public/
+!README.md
 .env
 .server/instance/db
 TODO.md

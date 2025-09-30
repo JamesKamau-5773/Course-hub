@@ -28,6 +28,9 @@ app.json.compact = False
 print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 print(f"Instance path: {app.instance_path}")
 
+# Ensure instance folder exists
+os.makedirs(app.instance_path, exist_ok=True)
+
 # Initialize db with app
 db.init_app(app)
 
