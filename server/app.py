@@ -21,7 +21,7 @@ from .resources import(
 # Instantiate app, set attributes
 app = Flask(__name__, static_folder='../client/build/static', static_url_path='/static')
 import os
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.root_path, "instance", "app.db")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.instance_path, "app.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
