@@ -50,6 +50,8 @@ api.prefix = '/api'
 # Instantiate CORS
 CORS(app)
 
+# with app.app_context():
+#     db.create_all()
 
 # add API routes
 api.add_resource(SignupResource, '/auth/signup')
