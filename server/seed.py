@@ -27,9 +27,9 @@ def create_users():
         user = Users(
             username=fake.user_name(),
             email=fake.email(),
-            password_hash=fake.password(length=12),
             role='instructor'
         )
+        user.set_password(fake.password(length=12))
         users.append(user)
 
     # Create 20 students
@@ -37,10 +37,19 @@ def create_users():
         user = Users(
             username=fake.user_name(),
             email=fake.email(),
-            password_hash=fake.password(length=12),
             role='student'
         )
+        user.set_password(fake.password(length=12))
         users.append(user)
+
+    # Add test user
+    test_user = Users(
+        username='testuser',
+        email='test@example.com',
+        role='student'
+    )
+    test_user.set_password('password123')
+    users.append(test_user)
 
     db.session.add_all(users)
     db.session.commit()

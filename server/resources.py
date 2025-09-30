@@ -4,13 +4,31 @@ from models import db, Users, Students, Instructors, Courses, Enrollments
 from datetime import datetime
 import jwt
 import flask_bcrypt as Bcrypt
+from functools import wraps
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return {'error': 'Token is missing'}, 401
+        try:
+            token = auth_header.split(" ")[1]  # Bearer <token>
+            user = Users.verify_token(token)
+            if not user:
+                return {'error': 'Token is invalid'}, 401
+        except:
+            return {'error': 'Token is invalid'}, 401
+        return f(*args, **kwargs)
+    return decorated
 
 class UsersResource(Resource):
+    @token_required
     def get(self):
         users = Users.query.all()
         return [user.to_dict() for user in users], 200
 
+    @token_required
     def post(self):
         data = request.get_json()
         try:
@@ -26,25 +44,25 @@ class UsersResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 400
 
-class SighnupResource(Resource):
+class SignupResource(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data.get('username') or not data.get('password'):
-            return {'error': 'Username and password are required'}, 400
-        
-        if Users.query.filter_by(username=data['username']).first():
+        if not data.get('name') or not data.get('password') or not data.get('email'):
+            return {'error': 'Name, email and password are required'}, 400
+
+        if Users.query.filter_by(username=data['name']).first():
             return {'error': 'Username already exists'}, 400
-        
-        if Users.query.filter_by(email=data.get('email','')).first():
-            return {'error': 'Email alredy exists'}, 400
-        
+
+        if Users.query.filter_by(email=data['email']).first():
+            return {'error': 'Email already exists'}, 400
+
         try:
-            
+
             user = Users(
-               username=data['username'],
+               username=data['name'],
                email=data['email'],
-               role=data['role']
+               role='student'
 
             )
 
@@ -57,7 +75,7 @@ class SighnupResource(Resource):
                 'user': user.to_dict(),
                 'token': token
             }
-        
+
         except Exception as e:
             return {'error': str(e)}, 400
 
@@ -65,19 +83,19 @@ class LoginResource(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data.get ('username') or not data.get ('password'):
-            return {'error': 'Username and password are required'}, 400
+        if not data.get ('email') or not data.get ('password'):
+            return {'error': 'Email and password are required'}, 400
 
-        user=Users.query.filter_by(username=data['username']).first()
+        user=Users.query.filter_by(email=data['email']).first()
 
         if not user or not user.check_password(data['password']):
-            return {'error': 'Invalid username or password'}, 401
+            return {'error': 'Invalid email or password'}, 401
 
         token = user.generate_token()
         return{
             'user': user.to_dict(),
             'token': token
-        }, 200      
+        }, 200
 
 class LogoutResource(Resource):
     def post(self):
@@ -264,6 +282,62 @@ class StudentEnrollmentsResource(Resource):
     def get(self, student_id):
         student = Students.query.get_or_404(student_id)
         return [enrollment.to_dict() for enrollment in student.enrollments], 200
+
+
+class InstructorsResource(Resource):
+    def get(self):
+        instructors = Instructors.query.all()
+        return [instructor.to_dict() for instructor in instructors], 200
+
+    def post(self):
+        data = request.get_json()
+        try:
+            # Create user first
+            user = Users(
+                username=data['username'],
+                email=data['email'],
+                role='instructor'
+            )
+            user.set_password('defaultpassword')  # Or handle password
+            db.session.add(user)
+            db.session.flush()  # To get user.id
+
+            # Create instructor
+            instructor = Instructors(
+                name=data['name'],
+                specialty=data['specialty'],
+                user_id=user.id
+            )
+            db.session.add(instructor)
+            db.session.commit()
+            return instructor.to_dict(), 201
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 400
+
+
+class InstructorByIdResource(Resource):
+    def get(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        return instructor.to_dict(), 200
+
+    def patch(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        data = request.get_json()
+        try:
+            for attr, value in data.items():
+                if hasattr(instructor, attr):
+                    setattr(instructor, attr, value)
+            db.session.commit()
+            return instructor.to_dict(), 200
+        except Exception as e:
+            return {'error': str(e)}, 400
+
+    def delete(self, instructor_id):
+        instructor = Instructors.query.get_or_404(instructor_id)
+        db.session.delete(instructor)
+        db.session.commit()
+        return {'message': 'Instructor deleted successfully'}, 200
 
 
 class InstructorCoursesResource(Resource):

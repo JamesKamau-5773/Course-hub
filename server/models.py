@@ -1,6 +1,6 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.orm import validates
 from sqlalchemy import MetaData, Integer, String, Column, ForeignKey, DateTime, CheckConstraint
 from flask_sqlalchemy import SQLAlchemy
@@ -41,18 +41,18 @@ class Users(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def generate_token(self):
-        poyload = {
-            'user_ud': self.id,
+        payload = {
+            'user_id': self.id,
             'user_name': self.username,
             'role': self.role,
-            'exp': datetime.utcnow() + datetime.timedelta(days=1)
+            'exp': datetime.utcnow() + timedelta(days=1)
         }
-        return jwt.encode(poyload, 'secret_key', algorithm='HS256')    
+        return jwt.encode(payload, 'secret_key', algorithm='HS256')    
     @staticmethod
     def verify_token(token):
         try:
             payload = jwt.decode(token, 'secret_key', algorithms=['HS256'])
-            return Users.query.get(payload['user_Id'])
+            return Users.query.get(payload['user_id'])
         except: 
             return None
 
