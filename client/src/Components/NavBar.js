@@ -4,7 +4,7 @@ import { useSearch } from '../contexts/SearchContext';
 
 const Navbar = () => {
   const location = useLocation();
-  const { setSearchTerm, searchType, setSearchType } = useSearch();
+  const { searchTerm, setSearchTerm, searchType, setSearchType } = useSearch();
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
