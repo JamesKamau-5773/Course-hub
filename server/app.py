@@ -5,7 +5,7 @@
 import os
 
 # Remote library imports
-from flask import Flask
+from flask import Flask, send_file
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -19,7 +19,7 @@ from resources import(
 )
 
 # Instantiate app, set attributes
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../client/build/static', static_url_path='/static')
 import os
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.root_path, "instance", "app.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -61,7 +61,14 @@ api.add_resource(InstructorCoursesResource, '/instructors/<int:instructor_id>/co
 
 @app.route('/')
 def home():
-    return 'Course Hub API'
+    return send_file('../client/build/index.html')
+
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path.startswith('api/'):
+        return 'API route not found', 404
+    return send_file('../client/build/index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    port = int(os.environ.get('PORT', 5002))
+    app.run(host='0.0.0.0', port=port, debug=False)
