@@ -1,18 +1,13 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime, timedelta
-from sqlalchemy.orm import validates
-from sqlalchemy import MetaData, Integer, String, Column, ForeignKey, DateTime, CheckConstraint
+from sqlalchemy import Integer, String, Column, ForeignKey, DateTime
 from flask_sqlalchemy import SQLAlchemy
-import re
 import jwt
 from flask_bcrypt import Bcrypt
 
-# Define metadata
-metadata = MetaData()
-
 # Create db instance here (remove the import from config)
-db = SQLAlchemy(metadata=metadata)
+db = SQLAlchemy()
 bcrypt = Bcrypt()
 
 class Users(db.Model, SerializerMixin):
