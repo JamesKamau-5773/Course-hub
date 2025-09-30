@@ -3,6 +3,8 @@
 #### A full-stack web application for course management, built with React frontend and Flask backend, featuring authentication, dashboards, and CRUD operations for courses, students, and enrollments.
 
 #### By **James Kamau**
+#### By **Alex Mwangi**
+
 
 ## Description
 
