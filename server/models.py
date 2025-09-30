@@ -8,10 +8,8 @@ import re
 import jwt
 from flask_bcrypt import Bcrypt
 
-# Define naming convention
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
+# Define metadata
+metadata = MetaData()
 
 # Create db instance here (remove the import from config)
 db = SQLAlchemy(metadata=metadata)
