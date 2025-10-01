@@ -20,23 +20,18 @@ from .resources import(
 
 # Instantiate app, set attributes
 app = Flask(__name__, static_folder='../client/build/static', static_url_path='/static')
-import os
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.instance_path, "app.db")}'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+from .config import Config
+app.config.from_object(Config)
 app.json.compact = False
-
-print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-print(f"Instance path: {app.instance_path}")
-
-# Ensure instance folder exists
-os.makedirs(app.instance_path, exist_ok=True)
 
 # Initialize db with app
 db.init_app(app)
 
-# Create all tables
-with app.app_context():
-    db.create_all()
+# Create all tables only for local SQLite development
+if 'sqlite' in app.config['SQLALCHEMY_DATABASE_URI']:
+    with app.app_context():
+        db.create_all()
 
 from .models import bcrypt
 bcrypt.init_app(app)
