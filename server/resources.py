@@ -21,11 +21,19 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
+import logging
+
 class UsersResource(Resource):
     @token_required
     def get(self):
-        users = Users.query.all()
-        return [user.to_dict() for user in users], 200
+        try:
+            users = Users.query.all()
+            # To avoid recursion or serialization issues, exclude related fields that cause cycles
+            users_dict = [user.to_dict(rules=('-student_profile.user', '-instructor_profile.user')) for user in users]
+            return users_dict, 200
+        except Exception as e:
+            logging.error(f"Error fetching users: {e}", exc_info=True)
+            return {'error': 'Internal Server Error'}, 500
 
     @token_required
     def post(self):
@@ -41,6 +49,7 @@ class UsersResource(Resource):
             db.session.commit()
             return user.to_dict(), 201
         except Exception as e:
+            logging.error(f"Error creating user: {e}", exc_info=True)
             return {'error': str(e)}, 400
 
 class SignupResource(Resource):
@@ -138,6 +147,25 @@ class StudentsResource(Resource):
 
     def post(self):
         data = request.get_json()
+        errors = []
+        if not data.get('name'):
+            errors.append('Name is required')
+        if not isinstance(data.get('age'), int) or data.get('age') <= 0:
+            errors.append('Age must be a positive integer')
+        if not data.get('student_id'):
+            errors.append('Student ID is required')
+        if not isinstance(data.get('enrolment_year'), int) or data.get('enrolment_year') <= 0:
+            errors.append('Enrolment year must be a positive integer')
+        if not data.get('user_id'):
+            errors.append('User ID is required')
+        else:
+            user = Users.query.get(data['user_id'])
+            if not user:
+                errors.append('User not found')
+
+        if errors:
+            return {'errors': errors}, 400
+
         try:
             student = Students(
                 name=data['name'],
@@ -311,6 +339,19 @@ class InstructorsResource(Resource):
 
     def post(self):
         data = request.get_json()
+        errors = []
+        if not data.get('username'):
+            errors.append('Username is required')
+        if not data.get('email'):
+            errors.append('Email is required')
+        if not data.get('name'):
+            errors.append('Name is required')
+        if not data.get('specialty'):
+            errors.append('Specialty is required')
+
+        if errors:
+            return {'errors': errors}, 400
+
         try:
             # Create user first
             user = Users(
