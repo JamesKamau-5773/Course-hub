@@ -184,6 +184,27 @@ class CoursesResource(Resource):
 
     def post(self):
         data = request.get_json()
+        errors = []
+        if not data.get('title'):
+            errors.append('Title is required')
+        if not data.get('course_code'):
+            errors.append('Course code is required')
+        if not data.get('description'):
+            errors.append('Description is required')
+        if not isinstance(data.get('credit_hours'), int) or data.get('credit_hours') <= 0:
+            errors.append('Credit hours must be a positive integer')
+        if not isinstance(data.get('max_capacity'), int) or data.get('max_capacity') <= 0:
+            errors.append('Max capacity must be a positive integer')
+        if not data.get('instructor_id'):
+            errors.append('Instructor ID is required')
+        else:
+            instructor = Instructors.query.get(data['instructor_id'])
+            if not instructor:
+                errors.append('Instructor not found')
+
+        if errors:
+            return {'errors': errors}, 400
+
         try:
             course = Courses(
                 title=data['title'],
