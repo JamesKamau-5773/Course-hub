@@ -1,4 +1,4 @@
-const API_URL = 'https://course-hub-kmcj.onrender.com/api';
+const API_URL = 'https://course-hub-1.onrender.com/api';
 
 const getToken = () => localStorage.getItem('token');
 

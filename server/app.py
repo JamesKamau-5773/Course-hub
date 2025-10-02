@@ -39,8 +39,7 @@ bcrypt.init_app(app)
 migrate = Migrate(app, db)
 
 # Instantiate REST API
-api = Api(app)
-api.prefix = '/api'
+api = Api(app, prefix='/api')
 
 # Instantiate CORS
 CORS(app)
