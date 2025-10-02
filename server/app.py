@@ -63,15 +63,26 @@ api.add_resource(InstructorsResource, '/instructors')
 api.add_resource(InstructorByIdResource, '/instructors/<int:instructor_id>')
 api.add_resource(InstructorCoursesResource, '/instructors/<int:instructor_id>/courses')
 
+import os
+from flask import send_from_directory
+
 @app.route('/')
 def home():
-    return send_file('../client/build/index.html')
+    build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../client/build'))
+    index_path = os.path.join(build_dir, 'index.html')
+    if not os.path.exists(index_path):
+        return "React build not found. Please build the frontend first.", 404
+    return send_from_directory(build_dir, 'index.html')
 
 @app.route('/<path:path>')
 def serve_react_app(path):
     if path.startswith('api/'):
         return 'API route not found', 404
-    return send_file('../client/build/index.html')
+    build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../client/build'))
+    file_path = os.path.join(build_dir, path)
+    if not os.path.exists(file_path):
+        return send_from_directory(build_dir, 'index.html')
+    return send_from_directory(build_dir, path)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5002))
