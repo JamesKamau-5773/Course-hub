@@ -8,8 +8,8 @@ from faker import Faker
 from datetime import datetime
 
 # Local imports
-from app import app
-from models import db, Users, Students, Instructors, Courses, Enrollments
+from server.app import app
+from server.models import db, Users, Students, Instructors, Courses, Enrollments
 
 fake = Faker()
 
