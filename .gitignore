@@ -6,6 +6,7 @@
 !client/
 !public/
 !README.md
+!.netlifyignore
 .env
 .server/instance/db
 TODO.md
