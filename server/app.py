@@ -80,7 +80,7 @@ def home():
 
 @app.route('/<path:path>')
 def serve_react_app(path):
-    if path.startswith('api/'):
+    if path.startswith('api/') or path.startswith('static/'):
         return 'API route not found', 404
     build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../client/build'))
     file_path = os.path.join(build_dir, path)
