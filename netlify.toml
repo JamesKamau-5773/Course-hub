@@ -1,0 +1,8 @@
+[build]
+  command = "cd client && npm install && npm run build"
+  publish = "client/build"
+
+[build.environment]
+  NODE_VERSION = "18"
+  PYTHON_VERSION = "3.10"
+  MISE_PYTHON_COMPILE = "false"
