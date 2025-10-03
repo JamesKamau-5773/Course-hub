@@ -42,7 +42,7 @@ migrate = Migrate(app, db)
 api = Api(app, prefix='/api')
 
 # Instantiate CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
 # with app.app_context():
 #     db.create_all()
