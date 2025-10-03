@@ -19,11 +19,27 @@ from .resources import(
 )
 
 # Instantiate app, set attributes
+import logging
+from logging.handlers import RotatingFileHandler
+import os
+
 app = Flask(__name__, static_folder='../client/build/static', static_url_path='/static')
 
 from .config import Config
 app.config.from_object(Config)
 app.json.compact = False
+
+# Setup logging to file
+if not os.path.exists('logs'):
+    os.mkdir('logs')
+file_handler = RotatingFileHandler('logs/server.log', maxBytes=10240, backupCount=10)
+file_handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+))
+file_handler.setLevel(logging.INFO)
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
+app.logger.info('Server startup')
 
 # Initialize db with app
 db.init_app(app)

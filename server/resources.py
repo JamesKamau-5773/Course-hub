@@ -54,37 +54,38 @@ class UsersResource(Resource):
 
 class SignupResource(Resource):
     def post(self):
+        import logging
         data = request.get_json()
 
         if not data.get('name') or not data.get('password') or not data.get('email'):
+            logging.error("Signup failed: Missing name, email or password")
             return {'error': 'Name, email and password are required'}, 400
 
         if Users.query.filter_by(username=data['name']).first():
+            logging.error(f"Signup failed: Username {data['name']} already exists")
             return {'error': 'Username already exists'}, 400
 
         if Users.query.filter_by(email=data['email']).first():
+            logging.error(f"Signup failed: Email {data['email']} already exists")
             return {'error': 'Email already exists'}, 400
 
         try:
-
             user = Users(
                username=data['name'],
                email=data['email'],
                role='student'
-
             )
-
             user.set_password(data['password'])
-
             db.session.add(user)
             db.session.commit()
             token = user.generate_token()
-            return{
+            logging.info(f"User {data['name']} signed up successfully")
+            return {
                 'user': user.to_dict(),
                 'token': token
             }
-
         except Exception as e:
+            logging.error(f"Signup exception: {str(e)}", exc_info=True)
             return {'error': str(e)}, 400
 
 class LoginResource(Resource):
