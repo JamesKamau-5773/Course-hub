@@ -65,6 +65,11 @@ api.add_resource(InstructorCoursesResource, '/instructors/<int:instructor_id>/co
 import os
 from flask import send_from_directory
 
+@app.route('/manifest.json')
+def manifest():
+    build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../client/build'))
+    return send_from_directory(build_dir, 'manifest.json')
+
 @app.route('/')
 def home():
     build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../client/build'))
