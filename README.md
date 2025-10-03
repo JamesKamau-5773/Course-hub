@@ -274,3 +274,40 @@ GitHub: @JamesKamau-5773
 MIT License - See LICENSE file for details.
 
 If you find this project useful, please give it a star on GitHub!
+
+## Deployment Instructions
+
+To deploy the full application with the React frontend served by the Flask backend on Render or similar platforms, follow these steps:
+
+1. Build the React frontend:
+   ```bash
+   cd client
+   npm install
+   npm run build
+   cd ..
+   ```
+
+2. Ensure the React build output is located at `client/build`.
+
+3. Deploy the backend Flask app with the React build included:
+   - The Flask app is configured to serve static files from `client/build`.
+   - Make sure the `client/build` directory is included in your deployment.
+   - Set environment variables such as `DATABASE_URL` and `SECRET_KEY` as needed.
+
+4. On Render or your hosting platform, configure the start command to run the Flask app, for example:
+   ```bash
+   cd server
+   source venv/bin/activate
+   python app.py
+   ```
+
+5. The backend will serve the React app at the root URL and API endpoints under `/api`.
+
+6. Set the environment variable `REACT_APP_API_URL` in your frontend build environment to point to your backend API URL if needed.
+
+7. Verify the deployment by accessing the root URL and testing API functionality.
+
+This setup allows the frontend and backend to run together seamlessly, with the backend serving the React app and handling API requests.
+
+   python app.py
+   cd ..

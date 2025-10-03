@@ -1,4 +1,4 @@
-const API_URL = 'https://course-hub-2.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 const getToken = () => localStorage.getItem('token');
 
