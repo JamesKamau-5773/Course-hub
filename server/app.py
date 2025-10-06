@@ -60,6 +60,14 @@ api = Api(app, prefix='/api')
 # Instantiate CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
+# Add CORS headers for frontend running on different origin during local testing
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 # with app.app_context():
 #     db.create_all()
 
