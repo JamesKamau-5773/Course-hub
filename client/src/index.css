@@ -8,7 +8,7 @@
 body {
   font-family: 'Poppins', 'Inter', Arial, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(135deg, #0d0d0d, #1a001f); /* Black → Midnight Purple */
+  background: linear-gradient(135deg, #0a0a0a, #2a0030); /* Deeper Black → Rich Midnight Purple */
   color: #e5e5e5;
   min-height: 100vh;
 }
@@ -22,11 +22,11 @@ body {
 
 /* Navbar */
 .navbar {
-  background: rgba(20, 0, 30, 0.9);
+  background: rgba(30, 0, 40, 0.95);
   backdrop-filter: blur(6px);
   padding: 1rem 2rem;
   color: white;
-  box-shadow: 0 2px 8px rgba(128, 0, 128, 0.4);
+  box-shadow: 0 2px 8px rgba(128, 0, 128, 0.5);
 }
 
 .nav-content {
@@ -56,11 +56,11 @@ body {
 
 /* Cards */
 .card {
-  background: rgba(25, 0, 35, 0.95);
+  background: rgba(35, 0, 45, 0.95);
   padding: 2rem;
   margin: 1.5rem 0;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(90, 0, 150, 0.4);
+  box-shadow: 0 4px 12px rgba(100, 0, 160, 0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -124,26 +124,26 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #5a189a, #7b2cbf);
+  background: linear-gradient(90deg, #4a0e4e, #9d4edd);
 }
 .btn-success {
-  background: linear-gradient(90deg, #2d6a4f, #52b788);
+  background: linear-gradient(90deg, #2a1b3d, #6a0dad);
 }
 .btn-danger {
-  background: linear-gradient(90deg, #a4161a, #e5383b);
+  background: linear-gradient(90deg, #3d0b0b, #8b0000);
 }
 .btn-secondary {
-  background: linear-gradient(90deg, #495057, #6c757d);
+  background: linear-gradient(90deg, #2a2a2a, #5a5a5a);
 }
 .btn-warning {
-  background: linear-gradient(90deg, #f77f00, #fcbf49);
+  background: linear-gradient(90deg, #4b0082, #daa520);
   color: white;
   text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.2);
 }
 
 .btn-warning:hover {
-  background: linear-gradient(90deg, #e66a00, #f0b140);
+  background: linear-gradient(90deg, #3a0066, #c89620);
   color: white;
   text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }

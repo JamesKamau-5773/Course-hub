@@ -49,7 +49,7 @@ export const createCourse = (data) => fetchData('/courses', {
 });
 
 export const updateCourse = (id, data) => fetchData(`/courses/${id}`, {
-  method: 'PUT',
+  method: 'PATCH',
   body: JSON.stringify(data),
 });
 export const deleteCourse = (id) => fetchData(`/courses/${id}`, {
@@ -63,7 +63,7 @@ export const createStudent = (data) => fetchData('/students', {
   body: JSON.stringify(data),
 });
 export const updateStudent = (id, data) => fetchData(`/students/${id}`, {
-  method: 'PUT',
+  method: 'PATCH',
   body: JSON.stringify(data),
 });
 export const deleteStudent = (id) => fetchData(`/students/${id}`, {
@@ -90,7 +90,7 @@ export const createEnrollment = (data) => fetchData('/enrollments', {
   body: JSON.stringify(data),
 });
 export const updateEnrollment = (id, data) => fetchData(`/enrollments/${id}`, {
-  method: 'PUT',
+  method: 'PATCH',
   body: JSON.stringify(data),
 });
 export const deleteEnrollment = (id) => fetchData(`/enrollments/${id}`, {

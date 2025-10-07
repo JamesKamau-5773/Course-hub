@@ -15,7 +15,7 @@ from models import db  # Import db from models
 
 #Important resources
 from resources import(
-    UsersResource,UserByIdResource,StudentsResource,CoursesResource,EnrollmentsResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorByIdResource,InstructorCoursesResource,SighnupResource,LoginResource,LogoutResource
+    UsersResource,UserByIdResource,StudentsResource,StudentByIdResource,CoursesResource,CourseByIdResource,EnrollmentsResource,EnrollmentByIdResource,CourseEnrollmentsResource,StudentEnrollmentsResource,InstructorsResource,InstructorByIdResource,InstructorCoursesResource,SighnupResource,LoginResource,LogoutResource
 )
 
 # Instantiate app, set attributes
@@ -51,8 +51,11 @@ api.add_resource(LogoutResource, '/auth/logout')
 api.add_resource(UsersResource, '/users')
 api.add_resource(UserByIdResource, '/users/<int:user_id>')
 api.add_resource(StudentsResource, '/students')
+api.add_resource(StudentByIdResource, '/students/<int:student_id>')
 api.add_resource(CoursesResource, '/courses')
+api.add_resource(CourseByIdResource, '/courses/<int:course_id>')
 api.add_resource(EnrollmentsResource, '/enrollments')
+api.add_resource(EnrollmentByIdResource, '/enrollments/<int:enrollment_id>')
 api.add_resource(CourseEnrollmentsResource, '/courses/<int:course_id>/enrollments')
 api.add_resource(StudentEnrollmentsResource, '/students/<int:student_id>/enrollments')
 api.add_resource(InstructorsResource, '/instructors')

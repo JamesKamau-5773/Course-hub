@@ -122,17 +122,29 @@ class StudentsResource(Resource):
     def post(self):
         data = request.get_json()
         try:
+            # Create user first
+            user = Users(
+                username=data['username'],
+                email=data['email'],
+                role='student'
+            )
+            user.set_password('defaultpassword')  # Or handle password
+            db.session.add(user)
+            db.session.flush()  # To get user.id
+
+            # Create student
             student = Students(
-                name=data['name'],
-                age=data['age'],
+                name=data['username'],  # Assuming name is username
+                age=18,  # Default age
                 student_id=data['student_id'],
-                enrolment_year=data['enrolment_year'],
-                user_id=data['user_id']
+                enrolment_year=data['enrollment_year'],
+                user_id=user.id
             )
             db.session.add(student)
             db.session.commit()
             return student.to_dict(), 201
         except Exception as e:
+            db.session.rollback()
             return {'error': str(e)}, 400
 
 
