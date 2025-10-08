@@ -1,4 +1,0 @@
-- [x] Set up backend virtual environment and install dependencies
-- [x] Install frontend dependencies
-- [x] Run backend server
-- [x] Run frontend server

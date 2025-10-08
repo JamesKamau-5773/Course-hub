@@ -1,4 +1,4 @@
-from falsk import request
+from flask import request
 from functools import wraps
 from models import Users
 

@@ -4,13 +4,31 @@ from models import db, Users, Students, Instructors, Courses, Enrollments
 from datetime import datetime
 import jwt
 import flask_bcrypt as Bcrypt
+from functools import wraps
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return {'error': 'Token is missing'}, 401
+        try:
+            token = auth_header.split(" ")[1]  # Bearer <token>
+            user = Users.verify_token(token)
+            if not user:
+                return {'error': 'Token is invalid'}, 401
+        except:
+            return {'error': 'Token is invalid'}, 401
+        return f(*args, **kwargs)
+    return decorated
 
 class UsersResource(Resource):
+    @token_required
     def get(self):
         users = Users.query.all()
         return [user.to_dict() for user in users], 200
 
+    @token_required
     def post(self):
         data = request.get_json()
         try:
@@ -26,7 +44,7 @@ class UsersResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 400
 
-class SighnupResource(Resource):
+class SignupResource(Resource):
     def post(self):
         data = request.get_json()
 
