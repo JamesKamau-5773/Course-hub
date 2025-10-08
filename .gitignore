@@ -31,3 +31,7 @@ Thumbs.db
 
 # TODO
 TODO.md
+
+server/__pycache__/
+server/venv/
+*.pyc
