@@ -3,7 +3,7 @@
 #### A full-stack web application for course management, built with React frontend and Flask backend, featuring authentication, dashboards, and CRUD operations for courses, students, and enrollments.
 
 #### By **James Kamau**
-### By ** Alex Rooney**
+### By Alex Rooney
 ## Description
 
 Course Hub is a modern web application designed for educational institutions to manage courses, students, and enrollments efficiently. It provides user authentication, a dashboard for statistics, and comprehensive CRUD functionality for managing educational data. Built with React for the frontend, Flask for the backend, and SQLite for data persistence, it demonstrates full-stack development with JWT-based security and responsive UI.
